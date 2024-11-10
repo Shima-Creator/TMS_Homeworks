@@ -1,4 +1,4 @@
-#2 Задание
+# 2 Задание
 class Car:
     def __init__(self, brand, model, release_year, speed=0):
         self.__brand = brand
@@ -22,10 +22,7 @@ class Car:
     def show_speed(self):
         return f"Скорость равна {self.__speed} км/ч"
 
-
-
-
-    #Геттеры
+    # Геттеры
     @property
     def brand(self):
         return self.__brand
@@ -42,8 +39,7 @@ class Car:
     def speed(self):
         return self.__speed
 
-
- #Cеттеры
+    # Cеттеры
     @brand.setter
     def brand(self, car_brand):
         if car_brand:
@@ -57,19 +53,20 @@ class Car:
             self.__model = car_model
         else:
             raise ValueError("Choose model of your car")
+
     @release_year.setter
     def release_year(self, car_release):
         if car_release:
             self.__release_year = car_release
         else:
             raise ValueError("Choose release year of your car")
+
     @speed.setter
     def speed(self, car_speed):
         if car_speed:
             self.__speed = car_speed
         else:
             raise ValueError("Choose speed of your car")
-
 
 
 brand = str(input("Введите марку автомобиля:"))

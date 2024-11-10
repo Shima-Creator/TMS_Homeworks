@@ -1,5 +1,6 @@
 import time
 
+
 length_num = int(input("Введите длину последовательности чисел:"))
 
 def generator_func(len):
@@ -14,4 +15,5 @@ def print_gen(gener):
 
 
 inf_gen = generator_func(length_num)
+
 print_gen(inf_gen)
