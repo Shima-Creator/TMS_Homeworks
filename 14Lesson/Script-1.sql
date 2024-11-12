@@ -1,3 +1,4 @@
+
 CREATE DATABASE employees;
 
 CREATE TABLE employees (name VARCHAR(50),
@@ -6,11 +7,11 @@ CREATE TABLE employees (name VARCHAR(50),
 						salary INT);
 
 INSERT INTO employees (name, Position, department, salary)
+
 VALUES ('Ilya Shimanko', 'developer', 'development', 4000),
 		('Nickolay Efremov', 'manager', 'marketing', 6000),
 		('Alexandr Petrov','salesman','sales',7500);
 		
-
 UPDATE employees SET Position='main-salesman' WHERE name='Alexandr Petrov';
 
 alter table employees add column HireDate DATE;
@@ -28,4 +29,5 @@ select name from employees where department ='sales';
 select AVG(salary) as AvgSalary from employees;
 
 DROP TABLE employees;
+
 

@@ -1,8 +1,21 @@
 # 1 задание
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import Optional
 
 
-class BookValueError(Exception):
+class InvalidAuthorValueError(Exception):
+    pass
+
+
+class InvalidPageCountError(Exception):
+    pass
+
+
+class InvalidYearError(Exception):
+    pass
+
+
+class InvalidPriceError(Exception):
     pass
 
 
@@ -12,17 +25,17 @@ class Book:
     year: int
     author: str
     price: float
-    book_id: int = None
+    book_id: Optional[int] = field(init=False, default=None, compare=False)
 
     def __post_init__(self):
         if self.pages <= 0 or not isinstance(self.pages, int):
-            raise BookValueError("Кол-во страниц должно быть больше 0")
+            raise InvalidPageCountError("Кол-во страниц должно быть больше 0")
         elif (2024 < self.year < 0) or not isinstance(self.year, int):
-            raise BookValueError("Год не может быть меньше 0 и больше нынешнего года")
+            raise InvalidYearError("Год не может быть меньше 0 и больше нынешнего года")
         elif self.author == "" or not isinstance(self.author, str):
-            raise BookValueError("Автор не указан")
+            raise InvalidAuthorValueError("Автор не указан")
         elif self.price <= 0 or not isinstance(self.price, (int, float)):
-            raise BookValueError("Цена не может быть отрицательной")
+            raise InvalidPriceError("Цена не может быть отрицательной")
 
     def comparasion_price(self, other):
         if self.price == other.price:
@@ -45,7 +58,7 @@ class Book:
 class Library:
 
     def __init__(self):
-        self.list_books = list()
+        self.dict_books = dict()
         self.id = 1
         pass
 
@@ -53,20 +66,26 @@ class Library:
         if book.book_id is None:
             book.book_id = self.id
             self.id += 1
-        self.list_books.append(book)
+        self.dict_books.update({book.book_id: book})
 
     def get_book_info(self, book_id):
-        for book in self.list_books:
-            if book.book_id == book_id:
-                return book
+        for id in self.dict_books.keys():
+            if id == book_id:
+                return self.dict_books.get(id)
 
-    def find_author(self, authors):
-        for book in self.list_books:
-            if book.author in self.list_books:
+    def find_author(self, author):
+        for book in self.dict_books.values():
+            if author in book.author:
                 return book
 
     def __str__(self):
-        return f"Books {self.list_books}"
+        return f"Books {self.dict_books.values()}"
 
 
+book1 = Book(215, 2003, "Price", 19.2)
+book2 = Book(312, 2012, "Ann", 13.7)
+
+lib = Library()
+lib.add_book(book1)
+lib.add_book(book2)
 

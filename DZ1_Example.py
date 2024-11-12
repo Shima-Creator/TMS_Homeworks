@@ -20,12 +20,9 @@ class MyTime:
             self.minutes = args[0].minutes
             self.seconds = args[0].seconds
 
-        self.show_time()
+        self.normalize_time()
 
-    def print_args(self):
-        print(self.hours, self.minutes, self.seconds)
-
-    def show_time(self):
+    def normalize_time(self):
         if self.seconds >= 60:
             self.minutes += self.seconds // 60
             self.seconds %= 60
