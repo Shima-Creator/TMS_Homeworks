@@ -1,0 +1,57 @@
+#1 Example
+
+CREATE DATABASE books;
+
+
+CREATE TABLE authors (
+	id int PRIMARY KEY,
+	first_name VARCHAR(100),
+	last_name VARCHAR(150)
+);
+
+
+CREATE TABLE books (
+	id int PRIMARY KEY,
+	title VARCHAR(70),
+	author_id int,
+	publication_year INT,
+	CONSTRAINT fk_author
+		FOREIGN KEY (author_id)
+		REFERENCES authors(id)
+);
+
+
+CREATE TABLE sales (
+	id int PRIMARY KEY,
+	book_id INT,
+	quantity INT,
+	CONSTRAINT fk_book
+		FOREIGN KEY (book_id)
+		REFERENCES books(id)
+);
+
+
+INSERT INTO authors (id, first_name, last_name)
+VALUES (1, 'Ilya', 'Shimanko'),
+		(2, 'Ivan', 'Ivanov'),
+		(3, 'Stepan', 'Stepanov'),
+		(4, 'Petr', 'Petrov'),
+		(5, 'Kirill', 'Kirillov');
+
+
+INSERT INTO books (id, title, author_id, publication_year)
+VALUES (1, 'Harry Potter', 1, 2010),
+		(2, 'Lord of the Rings', 2, 2003),
+		(3, 'Misery', 3, 2005),
+		(4, 'Fighting club', 4, 2001),
+		(5, 'War and Piece', 4, 1840);
+
+
+INSERT INTO sales (id, book_id, quantity)
+VALUES (1, 1, 20),
+		(2, 2, 50),
+		(3, 3, 15),
+		(4, 4, 42),
+		(5, 5, 23);
+
+
