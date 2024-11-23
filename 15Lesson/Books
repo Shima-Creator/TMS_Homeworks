@@ -113,3 +113,19 @@ FROM authors
     LEFT JOIN sales ON sales.book_id = books.author_id;
 
 
+#5 Example
+SELECT authors.first_name AS author_name,
+    authors.last_name AS author_last_name,
+    SUM(sales.quantity) OVER (PARTITION BY authors.first_name ORDER BY authors.last_name) AS sum_quantity
+FROM authors
+    LEFT JOIN books ON authors.id = books.author_id
+    LEFT JOIN sales ON sales.book_id = books.author_id;
+
+
+SELECT authors.first_name AS author_name,
+    authors.last_name AS author_last_name,
+    AVG(sales.quantity) OVER (PARTITION BY authors.first_name ORDER BY authors.last_name) AS Max
+FROM authors
+    LEFT JOIN books ON authors.id = books.author_id
+    LEFT JOIN sales ON sales.book_id = books.author_id
+where sales.quantity > (select AVG(sales.quantity) from sales);
