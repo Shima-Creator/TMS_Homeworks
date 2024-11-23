@@ -55,3 +55,25 @@ VALUES (1, 1, 20),
 		(5, 5, 23);
 
 
+#2 Example
+SELECT authors.first_name AS author_name,
+	authors.last_name AS author_last_name,
+    books.title AS book_title
+FROM authors
+INNER JOIN books ON authors.id = books.author_id;
+
+
+SELECT authors.first_name AS author_name,
+	authors.last_name AS author_last_name,
+    books.title AS book_title
+FROM authors
+LEFT JOIN books ON authors.id = books.author_id;
+
+
+SELECT authors.first_name AS author_name,
+	authors.last_name as author_last_name,
+    books.title AS book_title
+FROM authors
+RIGHT JOIN books ON authors.id = books.author_id;
+
+
