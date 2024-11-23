@@ -77,3 +77,22 @@ FROM authors
 RIGHT JOIN books ON authors.id = books.author_id;
 
 
+#3 Example
+SELECT authors.first_name AS author_name,
+    authors.last_name AS author_last_name,
+    books.title AS book_title,
+    sales.quantity AS sales_quantity
+FROM authors
+    INNER JOIN books ON authors.id = books.author_id
+    INNER JOIN sales ON sales.book_id = books.author_id;
+
+
+SELECT authors.first_name AS author_name,
+    authors.last_name AS author_last_name,
+    books.title AS book_title,
+    sales.quantity AS sales_quantity
+FROM authors
+    LEFT JOIN books ON authors.id = books.author_id
+    LEFT JOIN sales ON sales.book_id = books.author_id;
+
+
