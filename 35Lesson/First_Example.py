@@ -27,3 +27,15 @@ def write_file(search_method, start_time, finish_time, password):
         result_file.write(
             f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
 
+
+
+class PasswordSearcher:
+    def __init__(self, symbols, searched_password):
+        if len(searched_password) < 6:
+            add_length = 6 - len(searched_password)
+            searched_password = ('0' * add_length) + searched_password
+        self.symbols_list = symbols  # Принимаемый набор символов для подбора
+        self.password = searched_password  # Искомый пароль
+        self.stop_thread = False  # Сигнал о завершении потока Thread
+        self.stop_process = multiprocessing.Event()  # Сигнал о завершении процесса Process
+
