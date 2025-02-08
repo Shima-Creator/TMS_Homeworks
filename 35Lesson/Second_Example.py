@@ -37,8 +37,23 @@ def write_file(search_method, start_time, finish_time):
         result_file.write(
             f"Время выполнения {search_method} метода - {finish_time - start_time:4f}.\n")
 
+class RequestsManager:
 
+    def make_request(self, url_diapason):
+        """Выполняет GET-запрос к указанному URL."""
+        status_codes = []
 
+        url_num = 0
 
-
+        try:
+            for index, url in enumerate(url_diapason):
+                response = requests.get(url)
+                response.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+                print(f"Запрос к {url} вернул статус код: {response.status_code}")
+                status_codes.append(response.status_code)
+                url_num = url_diapason[index + 1] if index < len(url_diapason) - 1 else 0
+            return status_codes
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе к {url_num}: {e}")
+            return None
 
