@@ -126,17 +126,17 @@ if __name__ == "__main__":
     start = time.time()
 
     if choise == 1:
-        result = request.make_request(url_diapason=URLS)
+        request.make_request(url_diapason=URLS)
         finish = time.time()
         write_file("стандартного", start, finish)
     elif choise == 2:
         threads = int(input("Введите количество потоков:\n"))
-        result = request.make_request_threaded(url_diapason=URLS, threads_count=threads)
+        request.make_request_threaded(url_diapason=URLS, threads_count=threads)
         finish = time.time()
         write_file("многопоточного", start, finish)
     elif choise == 3:
         processes = int(input("Введите количество потоков:\n"))
-        result = request.make_request_processes(url_diapason=URLS, processes_count=processes)
+        request.make_request_processes(url_diapason=URLS, processes_count=processes)
         finish = time.time()
         write_file("многопроцессорного", start, finish)
 
