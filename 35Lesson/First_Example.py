@@ -131,3 +131,25 @@ class PasswordSearcher:
 
         print("Пароль не найден :(")
         return False
+
+    def start_threads(self):
+        """Запускает оба метода в отдельных потоках и ждет завершения одного из них."""
+        cpu_cores = os.cpu_count()
+        symbols_diap = len(self.symbols_list) // cpu_cores
+
+        threads = []
+
+        for i in range(cpu_cores):
+            start_index = i * symbols_diap
+            end_index = (i + 1) * symbols_diap if i < cpu_cores - 1 else len(
+                self.symbols_list)  # last process gets the remainder
+
+            process = threading.Thread(target=self.search_with_known_len,
+                                       args=(self.symbols_list[start_index:end_index],))
+            threads.append(process)
+            process.start()
+
+        for thread in threads:
+            thread.join()
+
+        print("Оба процесса завершены.")
