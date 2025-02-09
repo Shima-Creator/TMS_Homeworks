@@ -58,3 +58,21 @@ class RequestsManager:
         except requests.exceptions.RequestException as e:
             print(f"Ошибка при запросе к {url_num}: {e}")
             return None
+
+    def make_request_threaded(self, url_diapason, threads_count=1):
+        """Выполняет GET-запрос к указанному URL в потоке."""
+        thread_diapason = len(url_diapason) // threads_count
+
+        threads = []
+
+        for i in range(threads_count):
+            start = i * thread_diapason
+            end = (i + 1) * thread_diapason if i < (threads_count - 1) else len(url_diapason)
+            thread = threading.Thread(target=self.make_request, args=[url_diapason[start:end]])
+            threads.append(thread)
+            thread.start()
+
+        for thread in threads:
+            thread.join()
+
+        print("Все процессы завершены.")
