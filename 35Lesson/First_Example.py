@@ -173,3 +173,107 @@ class PasswordSearcher:
             process.join()
 
         print("Все процессы завершены.")
+
+
+if __name__ == '__main__':
+    print(f"Количество ядер: {os.cpu_count()}")
+
+    symbols = int(input("""
+            По каким символам подбирать пароль?
+        1.Цифры
+        2.Буквы в нижнем регистре
+        3.Буквы в верхнем регистре
+        4.Специальные символы
+        5.Цифры + буквы в нижнем регистре
+        6.Цифры + буквы в верхнем регистре
+        7.Все буквы
+        8.Цифры + спец. символы
+        9.Буквы в нижнем регистре + спец. символы
+        10.Буквы в верхнем регистре + спец. символы
+        11.Все символы
+        """))
+
+    symbols_list = []
+
+    if 0 > symbols or symbols > 11:
+        print("Выберите существующий вариант")
+    else:
+        if symbols == 1:
+            symbols_list = numbers_list
+        elif symbols == 2:
+            symbols_list = low_letters_list
+        elif symbols == 3:
+            symbols_list = high_letters_list
+        elif symbols == 4:
+            symbols_list = spec_symbols_list
+        elif symbols == 5:
+            symbols_list = numbers_list + low_letters_list
+        elif symbols == 6:
+            symbols_list = numbers_list + high_letters_list
+        elif symbols == 7:
+            symbols_list = low_letters_list + high_letters_list
+        elif symbols == 8:
+            symbols_list = numbers_list + spec_symbols_list
+        elif symbols == 9:
+            symbols_list = low_letters_list + spec_symbols_list
+        elif symbols == 10:
+            symbols_list = high_letters_list + spec_symbols_list
+        elif symbols == 11:
+            symbols_list = numbers_list + low_letters_list + high_letters_list + spec_symbols_list
+
+    print(len(symbols_list))
+    password = str(input("Введите пароль из 6 символов: "))
+
+    if len(password) > 6:  # сделать через try
+        print("Введите пароль длиной не больше 6 символов!")
+
+    choise = int(input("""
+        Выберите метод подбора пароля:
+    1.Стандартный способ.
+    2.Реверсивный метод.
+    3.Многопоточный метод.
+    4.Многопроцессорный метод.\n"""))
+
+    start = time.time()
+
+    searcher = PasswordSearcher(symbols=symbols_list, searched_password=password)
+
+    if (choise < 1) or (4 < choise):
+        print('Выберите один из указанных пунктов!')
+
+    else:
+        if choise == 1:
+            print("Вы выбрали стандартный метод!\n")
+            searcher.search_with_known_len(diapason=symbols_list)
+            searcher.stop_thread = False  # Сбрасываем флаг для следующего поиска
+
+            finish = time.time()
+
+            write_file("стандартного", start_time=start, finish_time=finish, password=password)
+
+        elif choise == 2:
+            print("Вы выбрали реверсивный метод!\n")
+            searcher.rec_search_with_known_len()
+            searcher.stop_thread = False  # Сбрасываем флаг для следующего поиска
+
+            finish = time.time()
+
+            write_file("реверсивного", start_time=start, finish_time=finish, password=password)
+
+        elif choise == 3:
+            print("Вы выбрали многопоточный метод!\n")
+            searcher.start_threads()
+            searcher.stop_thread = False  # Сбрасываем флаг для следующего поиска
+
+            finish = time.time()
+
+            write_file("многопоточного", start_time=start, finish_time=finish, password=password)
+
+        elif choise == 4:
+            print("Вы выбрали многопроцессорный метод!\n")
+            searcher.start_multiprocessing()
+            searcher.stop_thread = False  # Сбрасываем флаг для следующего поиска
+
+            finish = time.time()
+
+            write_file("многопроцессорного", start_time=start, finish_time=finish, password=password)
