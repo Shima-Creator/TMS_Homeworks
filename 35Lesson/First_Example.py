@@ -19,7 +19,7 @@ spec_symbols_list = ('~', '|', '/', '.', ',', '*', '-',
                      '+', '<', '>', '?', '!', '&', '%',
                      '@', '#', '$', '(', ')',)
 
-#Функция для записи результата в файл
+# Функция для записи результата в файл
 def write_file(search_method, start_time, finish_time, password):
     print(f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
 
@@ -27,7 +27,7 @@ def write_file(search_method, start_time, finish_time, password):
         result_file.write(
             f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
 
-#Класс для поиска пароля
+# Класс для поиска пароля
 class PasswordSearcher:
     def __init__(self, symbols, searched_password):
         if len(searched_password) < 6:
@@ -37,3 +37,51 @@ class PasswordSearcher:
         self.password = searched_password  # Искомый пароль
         self.stop_thread = False  # Сигнал о завершении потока Thread
         self.stop_process = multiprocessing.Event()  # Сигнал о завершении процесса Process
+
+    def search_with_known_len(self, diapason):
+        """
+        Перебирает все комбинации паролей заданной длины.
+        :param diapason: Диапазон символов для подбора
+        """
+        if self.stop_thread or self.stop_process.is_set():
+            return True
+
+        pass_list = [''] * 6  # Инициализируем список пустыми строками для 6 символов
+        current_password = "".join(pass_list)
+
+        if current_password == self.password:
+            self.stop_thread = True
+            self.stop_process.set()
+            print(f"Пароль найден! Ваш пароль = {current_password}")
+
+            return True
+
+        for var1 in diapason:
+            pass_list[0] = var1
+            if self.stop_thread or self.stop_process.is_set(): break
+
+            for var2 in self.symbols_list:
+                pass_list[1] = var2
+
+                for var3 in self.symbols_list:
+                    pass_list[2] = var3
+                    print(current_password, " STANDART\n")
+
+                    for var4 in self.symbols_list:
+                        pass_list[3] = var4
+
+                        for var5 in self.symbols_list:
+                            pass_list[4] = var5
+
+                            for var6 in self.symbols_list:
+                                pass_list[5] = var6
+                                current_password = ''.join(pass_list)
+
+                                if current_password == self.password:
+                                    self.stop_thread = True
+                                    self.stop_process.set()
+                                    print(f"Пароль найден! Ваш пароль = {current_password}")
+                                    return True
+
+        print("Пароль не найден :(")
+        return False
