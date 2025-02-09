@@ -76,3 +76,21 @@ class RequestsManager:
             thread.join()
 
         print("Все процессы завершены.")
+
+    def make_request_processes(self, url_diapason, processes_count=1):
+        """Выполняет GET-запрос к указанному URL в потоке."""
+        process_diapason = len(url_diapason) // processes_count
+
+        processes = []
+
+        for i in range(processes_count):
+            start = i * process_diapason
+            end = (i + 1) * process_diapason if i < (processes_count - 1) else len(url_diapason)
+            process = multiprocessing.Process(target=self.make_request, args=[url_diapason[start:end]])
+            processes.append(process)
+            process.start()
+
+        for process in processes:
+            process.join()
+
+        print("Все процессы завершены.")
