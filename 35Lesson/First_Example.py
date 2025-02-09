@@ -153,3 +153,23 @@ class PasswordSearcher:
             thread.join()
 
         print("Оба процесса завершены.")
+
+    def start_multiprocessing(self):
+        """Запускает методы в отдельных процессах и останавливает все при завершении одного."""
+        cpu_cores = os.cpu_count()
+        symbols_diapason = len(self.symbols_list) // cpu_cores
+
+        processes = []
+        for i in range(cpu_cores):
+            start_index = i * symbols_diapason
+            end_index = (i + 1) * symbols_diapason if i < cpu_cores - 1 else len(self.symbols_list)
+
+            process = multiprocessing.Process(target=self.search_with_known_len,
+                                              args=(self.symbols_list[start_index:end_index],))
+            processes.append(process)
+            process.start()
+
+        for process in processes:
+            process.join()
+
+        print("Все процессы завершены.")
