@@ -6,16 +6,21 @@ class Animal(ABC):
     def speak(self):
         pass
 
+
 class Dog(Animal):
     def speak(self):
         return "Гав-гав"
+
 
 class Cat(Animal):
     def speak(self):
         return "Мяу-мяу"
 
+
 class AnimalFactory:
-    def create_animal(self, animal):
+
+    @staticmethod
+    def create_animal(animal):
         animal = animal.lower()
         if animal == "dog":
             return Dog()

@@ -13,6 +13,7 @@ class SuperStr(str):
                 repeat_bool = False
 
         return repeat_bool
+
     def is_palindrom(self):
         low_str = self.lower()
         reverse_str = low_str[::-1]
