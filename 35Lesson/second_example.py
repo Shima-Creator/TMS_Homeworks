@@ -30,7 +30,6 @@ URLS = [
         "https://www.ibm.com",
     ]
 
-# Функция записи результата в файл
 def write_file(search_method, start_time, finish_time):
     print(f"Время выполнения {search_method} метода - {finish_time - start_time:4f}.\n")
 
@@ -38,6 +37,25 @@ def write_file(search_method, start_time, finish_time):
         result_file.write(
             f"Время выполнения {search_method} метода - {finish_time - start_time:4f}.\n")
 
+class RequestsManager:
+
+    def make_request(self, url_diapason):
+        """Выполняет GET-запрос к указанному URL."""
+        status_codes = []
+
+        url_num = 0
+
+        try:
+            for index, url in enumerate(url_diapason):
+                response = requests.get(url)
+                response.raise_for_status()  # Raises HTTPError for bad responses (4xx or 5xx)
+                print(f"Запрос к {url} вернул статус код: {response.status_code}")
+                status_codes.append(response.status_code)
+                url_num = url_diapason[index + 1] if index < len(url_diapason) - 1 else 0
+            return status_codes
+        except requests.exceptions.RequestException as e:
+            print(f"Ошибка при запросе к {url_num}: {e}")
+            return None
 
 class RequestsManager:
 
@@ -95,7 +113,6 @@ class RequestsManager:
 
         print("Все процессы завершены.")
 
-
 if __name__ == "__main__":
     request = RequestsManager()
 
@@ -111,22 +128,17 @@ if __name__ == "__main__":
     if choise == 1:
         request.make_request(url_diapason=URLS)
         finish = time.time()
-
         write_file("стандартного", start, finish)
-        print(f"Время выполнения = {finish - start:4f} секунд")
-
     elif choise == 2:
         threads = int(input("Введите количество потоков:\n"))
         request.make_request_threaded(url_diapason=URLS, threads_count=threads)
         finish = time.time()
-
         write_file("многопоточного", start, finish)
-        print(f"Время выполнения = {finish - start:4f} секунд")
-
     elif choise == 3:
         processes = int(input("Введите количество потоков:\n"))
         request.make_request_processes(url_diapason=URLS, processes_count=processes)
         finish = time.time()
-
         write_file("многопроцессорного", start, finish)
-        print(f"Время выполнения = {finish - start:4f} секунд")
+
+    print(f"Время выполнения = {finish - start:4f} секунд")
+

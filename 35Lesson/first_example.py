@@ -19,15 +19,16 @@ spec_symbols_list = ('~', '|', '/', '.', ',', '*', '-',
                      '+', '<', '>', '?', '!', '&', '%',
                      '@', '#', '$', '(', ')',)
 
-# Функция для записи результата в файл
+# Запись результатов выполнения в файл
 def write_file(search_method, start_time, finish_time, password):
     print(f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
 
-    with open("Results.txt", 'a') as result_file:
+    with open("ResultsSearchPassword.txt", 'a') as result_file:
         result_file.write(
             f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
 
-# Класс для поиска пароля
+
+
 class PasswordSearcher:
     def __init__(self, symbols, searched_password):
         if len(searched_password) < 6:
@@ -168,6 +169,33 @@ class PasswordSearcher:
                                               args=(self.symbols_list[start_index:end_index],))
             processes.append(process)
             process.start()
+
+        # while not self.stop_process.is_set():
+        #     time.sleep(0.01)
+
+        for process in processes:
+            process.join()
+
+        print("Все процессы завершены.")
+
+
+    def start_multiprocessing(self):
+        """Запускает методы в отдельных процессах и останавливает все при завершении одного."""
+        cpu_cores = os.cpu_count()
+        symbols_diapason = len(self.symbols_list) // cpu_cores
+
+        processes = []
+        for i in range(cpu_cores):
+            start_index = i * symbols_diapason
+            end_index = (i + 1) * symbols_diapason if i < cpu_cores - 1 else len(self.symbols_list)
+
+            process = multiprocessing.Process(target=self.search_with_known_len,
+                                              args=(self.symbols_list[start_index:end_index],))
+            processes.append(process)
+            process.start()
+
+        # while not self.stop_process.is_set():
+        #     time.sleep(0.01)
 
         for process in processes:
             process.join()
