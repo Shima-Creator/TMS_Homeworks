@@ -18,3 +18,10 @@ high_letters_list = ('A', 'B', 'C', 'D', 'E', 'F', 'G',
 spec_symbols_list = ('~', '|', '/', '.', ',', '*', '-',
                      '+', '<', '>', '?', '!', '&', '%',
                      '@', '#', '$', '(', ')',)
+
+def write_file(search_method, start_time, finish_time, password):
+    print(f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
+
+    with open("Results.txt", 'a') as result_file:
+        result_file.write(
+            f"Время выполнения {search_method} метода - {finish_time - start_time:4f}. Пароль {password}.\n")
